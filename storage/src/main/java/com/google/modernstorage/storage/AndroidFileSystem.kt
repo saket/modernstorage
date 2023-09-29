@@ -28,7 +28,6 @@ import androidx.core.database.getStringOrNull
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okio.FileHandle
 import okio.FileMetadata
-import okio.FileNotFoundException
 import okio.FileSystem
 import okio.Path
 import okio.Sink
@@ -38,29 +37,20 @@ import okio.source
 import java.io.File
 import java.io.IOException
 import java.util.Locale
+import kotlin.LazyThreadSafetyMode.NONE
 import kotlin.coroutines.resume
 
 class AndroidFileSystem(private val context: Context) : FileSystem() {
     private val contentResolver = context.contentResolver
+    private val physicalFileSystem: FileSystem by lazy(NONE) { SYSTEM }
 
     private fun isPhysicalFile(file: Path): Boolean {
         return file.toString().first() == '/'
     }
 
-    private fun requireFileExist(file: File) {
-        if (!file.exists()) throw IOException("$this doesn't exist.")
-    }
-
-    private fun requireFileCreate(file: File) {
-        if (file.exists()) throw IOException("$this already exists.")
-    }
-
     override fun appendingSink(file: Path, mustExist: Boolean): Sink {
         if (isPhysicalFile(file)) {
-            val target = file.toFile()
-            if (mustExist) requireFileExist(target)
-
-            return target.sink(append = true)
+            return physicalFileSystem.appendingSink(file)
         }
 
         if (!mustExist) {
@@ -96,17 +86,12 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
     }
 
     override fun createSymlink(source: Path, target: Path) {
-        throw UnsupportedOperationException("Symlinks  can't be created in AndroidFileSystem")
+        throw UnsupportedOperationException("Symlinks can't be created in AndroidFileSystem")
     }
 
     override fun delete(path: Path, mustExist: Boolean) {
         if (isPhysicalFile(path)) {
-            val file = path.toFile()
-            val deleted = file.delete()
-            if (!deleted) {
-                if (!file.exists()) throw FileNotFoundException("no such file: $path")
-                else throw IOException("failed to delete $path")
-            }
+            physicalFileSystem.delete(path, mustExist)
         } else {
             val uri = path.toUri()
             val deletedRows = contentResolver.delete(uri, null, null)
@@ -117,32 +102,20 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         }
     }
 
-    override fun list(dir: Path): List<Path> = list(dir, throwOnFailure = true)!!
-
-    override fun listOrNull(dir: Path): List<Path>? = list(dir, throwOnFailure = false)
-
-    private fun list(dir: Path, throwOnFailure: Boolean): List<Path>? {
-        if (isPhysicalFile(dir)) {
-            return listPhysicalDirectory(dir, throwOnFailure)
+    override fun list(dir: Path): List<Path> {
+        return if (isPhysicalFile(dir)) {
+            physicalFileSystem.list(dir)
+        } else {
+            listDocumentProvider(dir, throwOnFailure = true)!!
         }
-
-        return listDocumentProvider(dir, throwOnFailure)
     }
 
-    private fun listPhysicalDirectory(dir: Path, throwOnFailure: Boolean): List<Path>? {
-        val file = dir.toFile()
-        val entries = file.list()
-        if (entries == null) {
-            if (throwOnFailure) {
-                if (!file.exists()) throw FileNotFoundException("no such file: $dir")
-                throw IOException("failed to list $dir")
-            } else {
-                return null
-            }
+    override fun listOrNull(dir: Path): List<Path>? {
+        return if (isPhysicalFile(dir)) {
+            physicalFileSystem.listOrNull(dir)
+        } else {
+            listDocumentProvider(dir, throwOnFailure = false)
         }
-        val result = entries.mapTo(mutableListOf()) { dir / it }
-        result.sort()
-        return result
     }
 
     private fun listDocumentProvider(dir: Path, throwOnFailure: Boolean): List<Path>? {
@@ -190,41 +163,22 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
     }
 
     private fun fetchMetadataFromPhysicalFile(path: Path): FileMetadata? {
-        val file = path.toFile()
-        val isRegularFile = file.isFile
-        val isDirectory = file.isDirectory
-        val lastModifiedAtMillis = file.lastModified()
-        val size = file.length()
+        val metadata = physicalFileSystem.metadataOrNull(path) ?: return null
 
-        if (!isRegularFile &&
-            !isDirectory &&
-            lastModifiedAtMillis == 0L &&
-            size == 0L &&
-            !file.exists()
-        ) {
-            return null
-        }
-
-        val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(file.toString())
+        val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(path.toString())
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.lowercase(Locale.getDefault()))
 
-        val extras = mutableMapOf(
+        val androidExtras = mutableMapOf(
             Path::class to path,
-            MetadataExtras.DisplayName::class to MetadataExtras.DisplayName(file.name),
-            MetadataExtras.FilePath::class to MetadataExtras.FilePath(file.absolutePath),
+            MetadataExtras.DisplayName::class to MetadataExtras.DisplayName(path.name),
+            MetadataExtras.FilePath::class to MetadataExtras.FilePath(path.toFile().absolutePath),
         )
+        if (mimeType != null) {
+            androidExtras[MetadataExtras.MimeType::class] = MetadataExtras.MimeType(mimeType)
+        }
 
-        if (mimeType != null) extras[MetadataExtras.MimeType::class] = MetadataExtras.MimeType(mimeType)
-
-        return FileMetadata(
-            isRegularFile = isRegularFile,
-            isDirectory = isDirectory,
-            symlinkTarget = null,
-            size = size,
-            createdAtMillis = null,
-            lastModifiedAtMillis = lastModifiedAtMillis,
-            lastAccessedAtMillis = null,
-            extras = extras
+        return metadata.copy(
+            extras = metadata.extras + androidExtras
         )
     }
 
@@ -362,10 +316,7 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
 
     override fun sink(file: Path, mustCreate: Boolean): Sink {
         if (isPhysicalFile(file)) {
-            val target = file.toFile()
-            if (mustCreate) requireFileCreate(target)
-
-            return file.toFile().sink()
+            return physicalFileSystem.sink(file, mustCreate)
         }
 
         if (mustCreate) {
@@ -384,7 +335,7 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
 
     override fun source(file: Path): Source {
         if (isPhysicalFile(file)) {
-            return file.toFile().source()
+            return physicalFileSystem.source(file)
         }
 
         val uri = file.toUri()
