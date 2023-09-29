@@ -25,6 +25,7 @@ android {
     defaultConfig {
         applicationId = "com.google.modernstorage.sample"
         minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
