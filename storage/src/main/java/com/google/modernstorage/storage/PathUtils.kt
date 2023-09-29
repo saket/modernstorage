@@ -22,10 +22,8 @@ import okio.Path.Companion.toPath
 
 fun Path.toUri(): Uri {
     val str = this.toString()
-
-    if (str.startsWith("content:/")) {
-        return Uri.parse(str.replace("content:/", "content://"))
-    }
+        .replace("content:/", "content://")
+        .replace("android.resource:/", "android.resource://")
 
     val uri = Uri.parse(str)
     return if (uri.isPhysicalFile()) Uri.fromFile(toFile()) else uri
