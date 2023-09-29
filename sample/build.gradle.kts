@@ -85,11 +85,11 @@ dependencies {
     /*
      * In a real world project you can use the BOM to import the different dependencies without needing
      * to define version for each of them
-     * implementation("com.google.modernstorage:modernstorage-bom:{{ version }}")
-     * implementation("com.google.modernstorage:modernstorage-permissions")
-     * implementation("com.google.modernstorage:modernstorage-photopicker")
+     * implementation("me.saket.modernstorage:modernstorage-bom:{{ version }}")
+     * implementation("me.saket.modernstorage:modernstorage-permissions")
+     * implementation("me.saket.modernstorage:modernstorage-photopicker")
      * implementation("com.squareup.okio:okio")
-     * implementation("com.google.modernstorage:modernstorage-storage")
+     * implementation("me.saket.modernstorage:modernstorage-storage")
      */
     implementation(project(":permissions"))
     implementation(libs.okio)

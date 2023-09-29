@@ -13,20 +13,20 @@ ModernStorage is available on `mavenCentral()`.
 
 ```kotlin
 // For storage permissions checking
-implementation("com.google.modernstorage:modernstorage-permissions:{{ lib_version }}")
+implementation("me.saket.modernstorage:modernstorage-permissions:{{ lib_version }}")
 
 // For storage interactions using Okio FileSystem API
-implementation("com.google.modernstorage:modernstorage-storage:{{ lib_version }}")
+implementation("me.saket.modernstorage:modernstorage-storage:{{ lib_version }}")
 ```
 
 Alternatively use the Bill of Material to just have to define the version once, and then define which modules you need.
 
 ```kotlin
-implementation("com.google.modernstorage:modernstorage-bom:{{ lib_version }}")
+implementation("me.saket.modernstorage:modernstorage-bom:{{ lib_version }}")
 
-implementation("com.google.modernstorage:modernstorage-permissions")
+implementation("me.saket.modernstorage:modernstorage-permissions")
 
-implementation("com.google.modernstorage:modernstorage-storage")
+implementation("me.saket.modernstorage:modernstorage-storage")
 
 // The Bill of Material includes Okio as well
 implementation("com.squareup.okio:okio")
