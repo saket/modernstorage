@@ -28,9 +28,7 @@ implementation("com.google.modernstorage:modernstorage-permissions")
 
 implementation("com.google.modernstorage:modernstorage-storage")
 
-// The Bill of Material includes Okio and Photo Picker as well
-implementation("com.google.modernstorage:modernstorage-photopicker")
-
+// The Bill of Material includes Okio as well
 implementation("com.squareup.okio:okio")
 ```
 

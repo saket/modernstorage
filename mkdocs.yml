@@ -1,7 +1,7 @@
 site_name: ModernStorage
-site_url: https://google.github.com/modernstorage/
-repo_name: google/modernstorage
-repo_url: https://github.com/google/modernstorage
+site_url: https://saket.github.com/modernstorage/
+repo_name: saket/modernstorage
+repo_url: https://github.com/saket/modernstorage
 edit_uri: edit/main/docs/
 site_description: "ModernStorage is a group of libraries that provide an abstraction layer over storage on Android to simplify its interactions"
 site_author: Google
@@ -15,13 +15,9 @@ theme:
 
 nav:
     -   'Overview': README.md
-    -   'Changelog': https://github.com/google/modernstorage/releases
+    -   'Changelog': https://github.com/saket/modernstorage/releases
     -   'Permissions': permissions.md
-    -   'Photo Picker': photopicker.md
     -   'Storage interactions': storage.md
-    # TODO: Remove below sections at the next release
-    -   'MediaStore (deprecated)': mediastore.md
-    -   'Filesystem (deprecated)': filesystem.md
 
 # Extensions
 markdown_extensions:
@@ -47,4 +43,4 @@ plugins:
     - macros
 
 extra:
-    lib_version: "1.0.0-alpha06"
+    lib_version: "1.0.0-alpha07"
