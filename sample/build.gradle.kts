@@ -19,6 +19,7 @@ plugins {
 }
 
 android {
+    namespace = "com.google.modernstorage.sample"
     compileSdk = 31
 
     defaultConfig {
