@@ -15,6 +15,7 @@
  */
 package com.google.modernstorage.storage
 
+import android.content.ContentResolver
 import android.net.Uri
 import okio.Path
 import okio.Path.Companion.toPath
@@ -26,10 +27,14 @@ fun Path.toUri(): Uri {
         return Uri.parse(str.replace("content:/", "content://"))
     }
 
-    return Uri.parse(str)
+    val uri = Uri.parse(str)
+    return if (uri.isPhysicalFile()) Uri.fromFile(toFile()) else uri
 }
 
 fun Uri.toOkioPath(): Path {
+    asPhysicalPathOrNull()?.let {
+        return it
+    }
     return this.toString().toPath(false)
 }
 
@@ -39,3 +44,23 @@ fun Uri.toOkioPath(): Path {
     DeprecationLevel.WARNING
 )
 fun Uri.toPath() = this.toOkioPath()
+
+private fun Uri.asPhysicalPathOrNull(): Path? {
+    if (!isPhysicalFile()) {
+        return null
+    }
+    return when (scheme) {
+        ContentResolver.SCHEME_FILE -> path!!.toPath()
+        else -> toString().toPath() // Probably represents a literal path on disk.
+    }
+}
+
+// Rules taken from Uri.fromFile() and combined with Coil's:
+// https://github.com/coil-kt/coil/blob/da3736114ec3ae4e86cbc0768ec98808f90dca2a/coil-base/src/main/java/coil/map/FileUriMapper.kt#L24
+internal fun Uri.isPhysicalFile(): Boolean {
+    return (scheme == null || scheme == ContentResolver.SCHEME_FILE) &&
+        authority.isNullOrBlank() &&
+        path?.startsWith("/") == true &&
+        pathSegments.isNotEmpty() &&
+        pathSegments.first() != "android_asset"
+}
