@@ -16,7 +16,6 @@ import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
  * limitations under the License.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
         google()
@@ -24,10 +23,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:8.1.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${libs.versions.kotlin.get()}")
     }
 }
 
@@ -35,8 +31,8 @@ plugins {
     id("com.diffplug.spotless") version "5.12.5"
     id("org.jetbrains.dokka") version "1.4.32"
     id("me.tylerbwong.gradle.metalava") version "0.1.9" apply false
-    id("com.vanniktech.maven.publish") version "0.18.0" apply false
-    id("org.jetbrains.kotlin.plugin.parcelize") version "1.4.32" apply false
+    id("com.vanniktech.maven.publish") version "0.25.3" apply false
+    id("org.jetbrains.kotlin.plugin.parcelize") version libs.versions.kotlin apply false
 }
 
 allprojects {

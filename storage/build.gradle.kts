@@ -51,7 +51,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.stdlib.jdk7)
     implementation(libs.coroutines.android)
     androidTestImplementation(libs.coroutines.android)
 

@@ -1,8 +1,7 @@
 [versions]
-kotlin = "1.5.31"
+kotlin = "1.9.0"
 
 [libraries]
-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlin" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.5.2" }
 
 okio = { module = "com.squareup.okio:okio", version = "3.0.0" }
