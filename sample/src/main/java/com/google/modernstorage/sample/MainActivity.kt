@@ -26,7 +26,6 @@ import androidx.navigation.compose.rememberNavController
 import com.google.modernstorage.sample.mediastore.AddFileToDownloadsScreen
 import com.google.modernstorage.sample.mediastore.AddMediaScreen
 import com.google.modernstorage.sample.permissions.CheckPermissionScreen
-import com.google.modernstorage.sample.photopicker.PickVisualMediaScreen
 import com.google.modernstorage.sample.saf.SelectDocumentFileScreen
 import com.google.modernstorage.sample.ui.theme.ModernStorageTheme
 
@@ -78,13 +77,6 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Demos.EditDocument.route) {
                         NotAvailableYetScreen(navController)
-                    }
-
-                    /**
-                     * Photo Picker demos
-                     */
-                    composable(Demos.PickVisualMedia.route) {
-                        PickVisualMediaScreen(navController)
                     }
                 }
             }

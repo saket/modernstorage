@@ -24,7 +24,6 @@ import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.NoteAdd
-import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.ui.graphics.vector.ImageVector
 
 data class Demo(
@@ -84,13 +83,6 @@ object Demos {
         icon = Icons.Filled.NoteAdd,
     )
 
-    val PickVisualMedia = Demo(
-        route = "demo_pick_visual_media",
-        name = R.string.demo_pick_visual_media_name,
-        description = R.string.demo_pick_visual_media_description,
-        icon = Icons.Filled.PhotoLibrary,
-    )
-
     val list = listOf(
         CheckPermission,
         AddMedia,
@@ -99,6 +91,5 @@ object Demos {
 //        ListMedia,
         SelectDocument,
 //        EditDocument,
-        PickVisualMedia,
     )
 }
