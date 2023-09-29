@@ -59,7 +59,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = compose.versions.current.get()
+        kotlinCompilerExtensionVersion = compose.versions.compiler.get()
     }
 
     packagingOptions {
