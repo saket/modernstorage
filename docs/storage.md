@@ -22,7 +22,7 @@ methods to read and write files but also get metadata.
 
 // {{ artifact }} requires Okio 3.x.x as a dependency
 implementation("com.squareup.okio:okio:3.0.0")
-implementation("com.google.modernstorage:{{ artifact }}:{{ lib_version }}")
+implementation("me.saket.modernstorage:{{ artifact }}:{{ lib_version }}")
 ```
 
 ## API reference

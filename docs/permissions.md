@@ -12,7 +12,7 @@ artifact: "modernstorage-permissions"
 
 ```groovy
 // build.gradle
-implementation("com.google.modernstorage:{{ artifact }}:{{ lib_version }}")
+implementation("me.saket.modernstorage:{{ artifact }}:{{ lib_version }}")
 ```
 
 ## API reference
