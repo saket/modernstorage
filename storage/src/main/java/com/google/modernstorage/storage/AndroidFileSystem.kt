@@ -301,7 +301,6 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         }
     }
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun fetchMetadataFromDocumentProvider(path: Path, uri: Uri): FileMetadata? {
         val cursor = contentResolver.query(
             uri,
