@@ -79,10 +79,14 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
     }
 
     /**
-     * Not yet implemented
+     * Not yet implemented for Uris.
      */
     override fun createDirectory(dir: Path, mustCreate: Boolean) {
-        TODO("Not yet implemented")
+        if (isPhysicalFile(dir)) {
+            physicalFileSystem.createDirectory(dir, mustCreate)
+        } else {
+            TODO("Not yet implemented")
+        }
     }
 
     override fun createSymlink(source: Path, target: Path) {
