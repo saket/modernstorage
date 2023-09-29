@@ -20,12 +20,11 @@ plugins {
 
 android {
     namespace = "com.google.modernstorage.sample"
-    compileSdk = 31
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.google.modernstorage.sample"
-        minSdk = 21
-        targetSdk = 31
+        minSdk = libs.versions.minSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
