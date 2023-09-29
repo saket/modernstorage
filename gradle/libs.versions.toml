@@ -2,10 +2,10 @@
 kotlin = "1.9.0"
 
 [libraries]
-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.5.2" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.7.3" }
 
-okio = { module = "com.squareup.okio:okio", version = "3.0.0" }
+okio = { module = "com.squareup.okio:okio", version = "3.5.0" }
 glide = { module = "com.github.skydoves:landscapist-glide", version = "1.4.5" }
 
 junit = { module = "junit:junit", version = "4.13.2" }
-robolectric = { module = "org.robolectric:robolectric", version = "4.7.3" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.9" }
