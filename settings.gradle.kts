@@ -29,6 +29,5 @@ rootProject.name = "modernstorage"
 
 include(":bom")
 include(":permissions")
-include(":photopicker")
 include(":storage")
 include(":sample")

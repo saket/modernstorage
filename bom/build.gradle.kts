@@ -6,7 +6,6 @@ plugins {
 dependencies {
     constraints {
         api(project(":permissions"))
-        api(project(":photopicker"))
         api(project(":storage"))
         api(libs.okio)
     }

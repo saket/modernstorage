@@ -91,7 +91,6 @@ dependencies {
      * implementation("com.google.modernstorage:modernstorage-storage")
      */
     implementation(project(":permissions"))
-    implementation(project(":photopicker"))
     implementation(libs.okio)
     implementation(project(":storage"))
 
