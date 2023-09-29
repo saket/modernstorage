@@ -29,7 +29,7 @@ buildscript {
 
 plugins {
     id("com.diffplug.spotless") version "5.12.5"
-    id("org.jetbrains.dokka") version "1.4.32"
+    id("org.jetbrains.dokka") version libs.versions.dokka
     id("me.tylerbwong.gradle.metalava") version "0.1.9" apply false
     id("com.vanniktech.maven.publish") version "0.25.3" apply false
     id("org.jetbrains.kotlin.plugin.parcelize") version libs.versions.kotlin apply false
