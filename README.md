@@ -10,12 +10,6 @@ simplify its interactions by apps developers. ModernStorage is:
 ## Documentation
 See the [project website][project_website] for documentation and APIs.
 
-## Contributions
-
-We're still at an early stage sharing the vision of ModernStorage and would love to have more feature requests and ideas proposed as issues.
-We would be glad to review pull requests, but keep in mind that we want to minimize expanding the API surface until we get more feedback from developers.
-Make sure to read the [Contributing](CONTRIBUTING.md) page first though.
-
 ## License
 
 ```
