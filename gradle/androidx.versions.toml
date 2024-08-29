@@ -9,3 +9,4 @@ espresso = { module = "androidx.test.espresso:espresso-core", version = "3.4.0" 
 rules = { module = "androidx.test:rules", version = "1.4.0" }
 uiautomator = { module = "androidx.test.uiautomator:uiautomator", version = "2.2.0" }
 runner = { module = "androidx.test:runner", version = "1.4.0" }
+assertk = { module = "com.willowtreeapps.assertk:assertk", version = "0.28.1" }
