@@ -95,7 +95,7 @@ dependencies {
     implementation(libs.okio)
     implementation(project(":storage"))
 
-    implementation(libs.glide)
+    implementation(libs.coil)
 
     testImplementation(libs.junit)
     androidTestImplementation(androidx.junit)

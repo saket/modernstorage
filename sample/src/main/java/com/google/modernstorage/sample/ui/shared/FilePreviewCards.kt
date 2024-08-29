@@ -30,9 +30,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.google.modernstorage.storage.MetadataExtras.DisplayName
 import com.google.modernstorage.storage.MetadataExtras.MimeType
-import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun FileDetailsCard(fileDetails: FileDetails, preview: @Composable (() -> Unit)? = null) {
@@ -69,10 +69,11 @@ fun FileDetailsCard(fileDetails: FileDetails, preview: @Composable (() -> Unit)?
 @Composable
 fun MediaPreviewCard(fileDetails: FileDetails) {
     FileDetailsCard(fileDetails) {
-        GlideImage(
+        AsyncImage(
             modifier = Modifier.height(200.dp),
-            imageModel = fileDetails.uri,
-            contentScale = ContentScale.FillWidth
+            model = fileDetails.uri,
+            contentScale = ContentScale.FillWidth,
+            contentDescription = null,
         )
     }
 }
