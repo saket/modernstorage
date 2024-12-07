@@ -26,6 +26,7 @@ import androidx.test.rule.GrantPermissionRule
 import kotlinx.coroutines.runBlocking
 import okio.Path
 import okio.Path.Companion.toOkioPath
+import okio.Path.Companion.toPath
 import okio.source
 import org.junit.Assert
 import org.junit.Before
@@ -51,12 +52,18 @@ class MediaStoreTest {
         fileSystem = AndroidFileSystem(appContext)
     }
 
-    private fun addFileFromAssets(extension: String, mimeType: String, collection: Uri, destination: File) {
+    private fun addFileFromAssets(
+        extension: String,
+        mimeType: String,
+        collection: Uri,
+        relativePath: String? = null,
+        expectedPath: String,
+    ) {
         val filename = "added-${System.currentTimeMillis()}.$extension"
         val uri = fileSystem.createMediaStoreUri(
-            filename,
-            collection,
-            destination.absolutePath
+            filename = filename,
+            collection = collection,
+            relativePath = relativePath,
         )!!
         val path = uri.toOkioPath()
 
@@ -75,7 +82,10 @@ class MediaStoreTest {
 
         Assert.assertEquals(filename, metadata.extra(MetadataExtras.DisplayName::class)!!.value)
         Assert.assertEquals(mimeType, metadata.extra(MetadataExtras.MimeType::class)!!.value)
-        Assert.assertEquals("$destination/$filename", metadata.extra(MetadataExtras.FilePath::class)!!.value)
+        Assert.assertEquals(
+            (expectedPath.toPath() / filename).toString(),
+            metadata.extra(MetadataExtras.FilePath::class)!!.value
+        )
 
         verifyBytes(appContext.assets.open("sample.$extension"), path)
         appContext.contentResolver.delete(uri, null, null)
@@ -97,60 +107,70 @@ class MediaStoreTest {
     @Test
     fun addImage() {
         addFileFromAssets(
-            "jpg",
-            "image/jpeg",
-            MediaStore.Images.Media.getContentUri("external"),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            extension = "jpg",
+            mimeType = "image/jpeg",
+            collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            expectedPath = "/storage/emulated/0/Pictures/"
         )
     }
 
     @Test
     fun addVideo() {
         addFileFromAssets(
-            "mp4",
-            "video/mp4",
-            MediaStore.Video.Media.getContentUri("external"),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+            extension = "mp4",
+            mimeType = "video/mp4",
+            collection = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            expectedPath = "/storage/emulated/0/Movies/",
         )
     }
 
     @Test
     fun addAudio() {
         addFileFromAssets(
-            "wav",
-            "audio/x-wav",
-            MediaStore.Audio.Media.getContentUri("external"),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+            extension = "wav",
+            mimeType = "audio/x-wav",
+            collection = MediaStore.Audio.Media.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            expectedPath = "/storage/emulated/0/Music/",
         )
     }
 
     @Test
     fun addText() {
         addFileFromAssets(
-            "txt",
-            "text/plain",
-            MediaStore.Files.getContentUri("external"),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            extension = "txt",
+            mimeType = "text/plain",
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            expectedPath = "/storage/emulated/0/Download/",
         )
     }
 
     @Test
     fun addPdf() {
         addFileFromAssets(
-            "pdf",
-            "application/pdf",
-            MediaStore.Files.getContentUri("external"),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            extension = "pdf",
+            mimeType = "application/pdf",
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            expectedPath = "/storage/emulated/0/Download/",
         )
     }
 
     @Test
     fun addZip() {
         addFileFromAssets(
-            "zip",
-            "application/zip",
-            MediaStore.Files.getContentUri("external"),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            extension = "zip",
+            mimeType = "application/zip",
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            expectedPath = "/storage/emulated/0/Download/",
+        )
+    }
+
+    @Test fun add_file_with_a_relative_path() {
+        addFileFromAssets(
+            extension = "jpg",
+            mimeType = "image/jpeg",
+            collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            relativePath = "${Environment.DIRECTORY_DOWNLOADS}/modernstorage",
+            expectedPath = "/storage/emulated/0/Download/modernstorage/",
         )
     }
 
@@ -162,7 +182,7 @@ class MediaStoreTest {
 
         val uri = fileSystem.createMediaStoreUri(
             "added-${System.currentTimeMillis()}.jpg",
-            MediaStore.Files.getContentUri("external"),
+            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath
         )!!
         val path = uri.toOkioPath()
@@ -182,7 +202,7 @@ class MediaStoreTest {
 
         val uri = fileSystem.createMediaStoreUri(
             "added-${System.currentTimeMillis()}.txt",
-            MediaStore.Files.getContentUri("external"),
+            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
         )!!
         val path = uri.toOkioPath()
@@ -202,7 +222,7 @@ class MediaStoreTest {
 
         val uri = fileSystem.createMediaStoreUri(
             "added-${System.currentTimeMillis()}.pdf",
-            MediaStore.Files.getContentUri("external"),
+            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
         )!!
         val path = uri.toOkioPath()

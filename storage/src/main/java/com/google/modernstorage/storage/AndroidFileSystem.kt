@@ -23,6 +23,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
+import androidx.core.content.contentValuesOf
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -360,7 +361,7 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
     fun createMediaStoreUri(filename: String, directory: String): Uri? {
         val newEntry = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-            put(MediaStore.MediaColumns.DATA, "$directory/$filename")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "$directory/$filename")
         }
 
         return context.contentResolver.insert(MediaStore.Files.getContentUri("external"), newEntry)
@@ -369,11 +370,13 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
     fun createMediaStoreUri(
         filename: String,
         collection: Uri = MediaStore.Files.getContentUri("external"),
-        directory: String?
+        relativePath: String?,
     ): Uri? {
         val newEntry = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-            if (directory !== null) put(MediaStore.MediaColumns.DATA, "$directory/$filename")
+            if (relativePath != null) {
+                put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+            }
         }
 
         return context.contentResolver.insert(collection, newEntry)
