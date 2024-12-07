@@ -181,9 +181,9 @@ class MediaStoreTest {
         }
 
         val uri = fileSystem.createMediaStoreUri(
-            "added-${System.currentTimeMillis()}.jpg",
-            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath
+            filename = "added-${System.currentTimeMillis()}.jpg",
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            relativePath = null,
         )!!
         val path = uri.toOkioPath()
 
@@ -201,9 +201,9 @@ class MediaStoreTest {
         }
 
         val uri = fileSystem.createMediaStoreUri(
-            "added-${System.currentTimeMillis()}.txt",
-            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+            filename = "added-${System.currentTimeMillis()}.txt",
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            relativePath = null,
         )!!
         val path = uri.toOkioPath()
 
@@ -221,9 +221,9 @@ class MediaStoreTest {
         }
 
         val uri = fileSystem.createMediaStoreUri(
-            "added-${System.currentTimeMillis()}.pdf",
-            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+            filename = "added-${System.currentTimeMillis()}.pdf",
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            relativePath = null,
         )!!
         val path = uri.toOkioPath()
 
