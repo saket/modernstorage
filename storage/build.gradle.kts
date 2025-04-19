@@ -57,6 +57,7 @@ dependencies {
     implementation(androidx.corektx)
     implementation(androidx.appcompat)
     implementation(libs.okio)
+    implementation(androidx.documentfile)
 
     testImplementation(libs.junit)
     androidTestImplementation(androidx.junit)

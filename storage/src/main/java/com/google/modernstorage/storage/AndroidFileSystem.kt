@@ -15,7 +15,6 @@
  */
 package com.google.modernstorage.storage
 
-import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.media.MediaScannerConnection
@@ -24,14 +23,10 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
-import androidx.core.content.contentValuesOf
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import androidx.core.provider.DocumentsContractCompat
 import androidx.documentfile.provider.DocumentFile
-import com.google.modernstorage.storage.MetadataExtras
-import com.google.modernstorage.storage.toOkioPath
-import com.google.modernstorage.storage.toUri
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okio.FileHandle
 import okio.FileMetadata
@@ -131,14 +126,7 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
 
     private fun listDocumentProvider(dir: Path, throwOnFailure: Boolean): List<Path>? {
         // TODO: Verify path is a directory
-        val origRootUri = dir.toUri()
-        val rootUri = if (DocumentsContractCompat.isTreeUri(origRootUri)) {
-            // Avoid an IllegalArgumentException for listing a tree URI
-            // content:/com.android.externalstorage.documents/tree/10EC-2814%3APodcasts
-            DocumentFile.fromTreeUri(context, origRootUri)?.uri ?: return null
-        } else {
-            origRootUri
-        }
+        val rootUri = dir.toDocumentUri()
         val documentId = DocumentsContract.getDocumentId(rootUri)
         val treeUri = DocumentsContract.buildChildDocumentsUriUsingTree(rootUri, documentId)
 
@@ -184,7 +172,7 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         return when {
             uri.isPhysicalFile() -> fetchMetadataFromPhysicalFile(path)
             uri.authority == MediaStore.AUTHORITY -> fetchMetadataFromMediaStore(path, uri)
-            else -> fetchMetadataFromDocumentProvider(path, uri)
+            else -> fetchMetadataFromDocumentProvider(path)
         }
     }
 
@@ -281,7 +269,8 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         }
     }
 
-    private fun fetchMetadataFromDocumentProvider(path: Path, uri: Uri): FileMetadata? {
+    private fun fetchMetadataFromDocumentProvider(path: Path): FileMetadata? {
+        val uri = path.toDocumentUri() ?: return null
         val cursor = contentResolver.query(
             uri,
             null,
@@ -448,6 +437,17 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
                     continuation.resume(scannedUri)
                 }
             }
+        }
+    }
+
+    private fun Path.toDocumentUri(): Uri? {
+        val origRootUri = this.toUri()
+        return if (DocumentsContractCompat.isTreeUri(origRootUri)) {
+            // Avoid an IllegalArgumentException for listing a tree URI
+            // content:/com.android.externalstorage.documents/tree/10EC-2814%3APodcasts
+            DocumentFile.fromTreeUri(context, origRootUri)?.uri ?: return null
+        } else {
+            origRootUri
         }
     }
 }
