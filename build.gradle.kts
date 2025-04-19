@@ -22,17 +22,18 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.4")
+        classpath("com.android.tools.build:gradle:8.9.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${libs.versions.kotlin.get()}")
     }
 }
 
 plugins {
-    id("com.diffplug.spotless") version "5.12.5"
+    id("com.diffplug.spotless") version "7.0.3"
     id("org.jetbrains.dokka") version libs.versions.dokka
-    id("me.tylerbwong.gradle.metalava") version "0.1.9" apply false
-    id("com.vanniktech.maven.publish") version "0.25.3" apply false
+    id("me.tylerbwong.gradle.metalava") version "0.3.5" apply false
+    id("com.vanniktech.maven.publish") version "0.31.0" apply false
     id("org.jetbrains.kotlin.plugin.parcelize") version libs.versions.kotlin apply false
+    id("org.jetbrains.kotlin.plugin.compose") version libs.versions.kotlin apply false
 }
 
 allprojects {
@@ -67,7 +68,7 @@ subprojects {
     }
 
     if (project.hasProperty("POM_ARTIFACT_ID") && project.properties["POM_ARTIFACT_ID"] != "modernstorage-bom") {
-        apply<me.tylerbwong.gradle.metalava.plugin.MetalavaPlugin>()
+        apply(plugin = "me.tylerbwong.gradle.metalava")
 
         metalava {
             filename = "api/current.api"

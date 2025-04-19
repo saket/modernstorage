@@ -26,7 +26,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.compileSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -48,6 +47,11 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    testOptions {
+        // Be a bit more tolerant of permission for the sake of tests
+        targetSdk = 30
+    }
 }
 
 dependencies {
@@ -58,6 +62,7 @@ dependencies {
     implementation(androidx.appcompat)
     implementation(libs.okio)
     implementation(androidx.documentfile)
+    implementation(libs.espresso.intents)
 
     testImplementation(libs.junit)
     androidTestImplementation(androidx.junit)
@@ -67,6 +72,7 @@ dependencies {
     androidTestImplementation(androidx.uiautomator)
     androidTestImplementation(androidx.runner)
     androidTestImplementation(androidx.assertk)
+    androidTestImplementation(libs.core.ktx)
 }
 repositories {
     mavenCentral()

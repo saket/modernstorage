@@ -50,33 +50,33 @@ class MediaStoreViewModel(application: Application) : AndroidViewModel(applicati
             val extension: String
             val mimeType: String
             val collection: Uri
-            val directory: File
+            val relativePath: String
 
             when (type) {
                 MediaType.IMAGE -> {
                     extension = "jpg"
                     mimeType = "image/jpeg"
                     collection = MediaStore.Images.Media.getContentUri("external")
-                    directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    relativePath = Environment.DIRECTORY_PICTURES
                 }
                 MediaType.VIDEO -> {
                     extension = "mp4"
                     mimeType = "video/mp4"
                     collection = MediaStore.Video.Media.getContentUri("external")
-                    directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+                    relativePath = Environment.DIRECTORY_MOVIES
                 }
                 MediaType.AUDIO -> {
                     extension = "wav"
                     mimeType = "audio/x-wav"
                     collection = MediaStore.Audio.Media.getContentUri("external")
-                    directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+                    relativePath = Environment.DIRECTORY_MUSIC
                 }
             }
 
             val uri = fileSystem.createMediaStoreUri(
                 filename = "added-${System.currentTimeMillis()}.$extension",
                 collection = collection,
-                directory = directory.absolutePath
+                relativePath = relativePath
             ) ?: return@launch clearAddedFile()
 
             val path = uri.toOkioPath()
@@ -120,7 +120,7 @@ class MediaStoreViewModel(application: Application) : AndroidViewModel(applicati
             val uri = fileSystem.createMediaStoreUri(
                 filename = "added-${System.currentTimeMillis()}.$extension",
                 collection = MediaStore.Files.getContentUri("external"),
-                directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+                relativePath = Environment.DIRECTORY_DOWNLOADS
             )!!
 
             val path = uri.toOkioPath()
