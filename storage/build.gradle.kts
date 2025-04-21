@@ -1,3 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
+import com.android.build.api.dsl.ManagedVirtualDevice
+
 /*
  * Copyright 2021 Google LLC
  *
@@ -47,6 +51,23 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    testOptions {
+        // Be a bit more tolerant of permission for the sake of tests
+        targetSdk = 30
+
+        // API level 26 and lower is currently not supported for Gradle Managed devices
+        val apiLevels = listOf(28, 29, 30, 31, 35)
+        managedDevices.allDevices {
+            apiLevels.forEach { api ->
+                create<ManagedVirtualDevice>("pixel6Api$api") {
+                    device = "Pixel 6"
+                    apiLevel = api
+                    systemImageSource = "aosp"
+                }
+            }
+        }
     }
 }
 
