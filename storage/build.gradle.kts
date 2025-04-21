@@ -30,7 +30,6 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.compileSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -78,6 +77,8 @@ dependencies {
     implementation(androidx.corektx)
     implementation(androidx.appcompat)
     implementation(libs.okio)
+    implementation(androidx.documentfile)
+    implementation(libs.espresso.intents)
 
     testImplementation(libs.junit)
     androidTestImplementation(androidx.junit)
@@ -87,6 +88,7 @@ dependencies {
     androidTestImplementation(androidx.uiautomator)
     androidTestImplementation(androidx.runner)
     androidTestImplementation(androidx.assertk)
+    androidTestImplementation(libs.core.ktx)
 }
 repositories {
     mavenCentral()

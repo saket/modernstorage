@@ -1,14 +1,19 @@
 [versions]
-kotlin = "1.9.10"
-compileSdk = "34"
+coreKtx = "1.6.1"
+espressoIntents = "3.6.1"
+kotlin = "2.1.20"
+compileSdk = "36"
+targetSdk = "34"
 minSdk = "21"
 dokka = "1.9.0"
 
 [libraries]
-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.7.3" }
+core-ktx = { module = "androidx.test:core-ktx", version.ref = "coreKtx" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.10.2" }
 
-okio = { module = "com.squareup.okio:okio", version = "3.5.0" }
+espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoIntents" }
+okio = { module = "com.squareup.okio:okio", version = "3.11.0" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
 
 junit = { module = "junit:junit", version = "4.13.2" }
-robolectric = { module = "org.robolectric:robolectric", version = "4.9" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.14.1" }
