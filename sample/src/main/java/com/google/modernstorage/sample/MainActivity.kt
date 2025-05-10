@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = HomeRoute
+                    startDestination = HomeRoute,
                 ) {
                     composable(HomeRoute) {
                         HomeScreen(navController)
