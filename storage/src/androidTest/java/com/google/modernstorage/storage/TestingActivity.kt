@@ -15,22 +15,32 @@
  */
 package com.google.modernstorage.storage
 
-import android.app.Activity
 import android.content.Intent
+import androidx.core.app.ComponentActivity
 
-class TestingActivity : Activity() {
+class TestingActivity : ComponentActivity() {
+
     /**
      * Return activity result for any intent (used in tests)
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println(data?.data)
+        println("onActivityResult $resultCode ${data?.data}")
 
         if (resultCode == RESULT_OK) {
+            val uri = data?.data!!
             // We persist the returned Uri to interact with it as the initial grant access will be
             // lost after finish() is called
-            data?.data?.let { uri ->
-                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            if (data.action == Intent.ACTION_OPEN_DOCUMENT_TREE) {
+                contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+                )
+            } else {
+                contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
             }
         }
 
