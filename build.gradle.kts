@@ -28,7 +28,6 @@ buildscript {
 }
 
 plugins {
-    id("com.diffplug.spotless") version "7.0.3"
     id("org.jetbrains.dokka") version libs.versions.dokka
     id("me.tylerbwong.gradle.metalava") version "0.3.5" apply false
     id("com.vanniktech.maven.publish") version "0.31.0" apply false
@@ -49,24 +48,6 @@ tasks.withType<DokkaMultiModuleTask>().configureEach {
 }
 
 subprojects {
-    apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
-    spotless {
-        kotlin {
-            target("**/*.kt")
-            ktlint("0.41.0")
-            licenseHeaderFile(rootProject.file("spotless/copyright.txt"))
-        }
-
-        groovyGradle {
-            target("**/*.gradle")
-            greclipse().configFile(rootProject.file("spotless/greclipse.properties"))
-            licenseHeaderFile(
-                rootProject.file("spotless/copyright.txt"),
-                "(buildscript|apply|import|plugins)"
-            )
-        }
-    }
-
     if (project.hasProperty("POM_ARTIFACT_ID") && project.properties["POM_ARTIFACT_ID"] != "modernstorage-bom") {
         apply(plugin = "me.tylerbwong.gradle.metalava")
 
