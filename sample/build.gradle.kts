@@ -84,13 +84,12 @@ dependencies {
      * to define version for each of them
      * implementation("me.saket.modernstorage:modernstorage-bom:{{ version }}")
      * implementation("me.saket.modernstorage:modernstorage-permissions")
-     * implementation("me.saket.modernstorage:modernstorage-photopicker")
      * implementation("com.squareup.okio:okio")
      * implementation("me.saket.modernstorage:modernstorage-storage")
      */
     implementation(project(":permissions"))
-    implementation(libs.okio)
     implementation(project(":storage"))
+    implementation(libs.okio)
 
     implementation(libs.coil)
 
