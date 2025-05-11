@@ -8,7 +8,6 @@
     <!-- Permission dialog -->
     <string name="authorization_dialog_title">Permission Authorization</string>
     <string name="authorization_dialog_add_files_description">We need to request access to your device storage to add files</string>
-    <string name="authorization_dialog_read_media_description">We need to request access to your device storage to show your media files</string>
     <string name="authorization_dialog_confirm_label">OK</string>
     <string name="authorization_dialog_cancel_label">Cancel</string>
     <string name="authorization_dialog_success_toast">Permission granted! You can now interact with the above actions</string>
@@ -33,8 +32,6 @@
 
     <string name="demo_capture_media_name">Capture Media</string>
     <string name="demo_capture_media_description">Capture media using camera intents</string>
-    <string name="demo_capture_image_label">Capture Image</string>
-    <string name="demo_capture_video_label">Capture Video</string>
 
     <string name="demo_add_file_to_downloads_name">Add File to Downloads</string>
     <string name="demo_add_file_to_downloads_description">Add file to the Downloads folder</string>
@@ -44,9 +41,6 @@
 
     <string name="demo_list_media_name">List Media</string>
     <string name="demo_list_media_description">List and manage MediaStore files</string>
-    <string name="demo_list_media_loading">Loading…</string>
-    <string name="demo_list_media_failure">MediaStore couldn\'t return results. Check Logcat</string>
-    <string name="demo_list_media_no_files_found">No media files found</string>
 
     <string name="demo_select_document_name">Select Document</string>
     <string name="demo_select_document_description">Read file using Storage Access Framework</string>
@@ -58,13 +52,4 @@
     <string name="demo_edit_document_name">Create and Edit Document</string>
     <string name="demo_edit_document_description">Edit file using Storage Access Framework</string>
 
-    <string name="demo_pick_visual_media_name">Pick Visual Media</string>
-    <string name="demo_pick_visual_media_description">Select using file picker and photo picker</string>
-    <string name="demo_system_file_picker">System File Picker</string>
-    <string name="demo_photo_picker">Photo Picker</string>
-    <string name="demo_pick_image">Select Image (1 max)</string>
-    <string name="demo_pick_video">Select Video (1 max)</string>
-    <string name="demo_pick_image_and_video">Select Image or Video (1 max)</string>
-    <string name="demo_pick_multiple_images_and_video">Select Image or Video (multiple)</string>
-    <string name="demo_pick_multiple_images_video_photo_picker">Select Images and/or Video (3 max)</string>
 </resources>

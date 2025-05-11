@@ -19,6 +19,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
@@ -293,7 +294,7 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
                 ?: contentResolver.getType(uri)
 
             val isFolder = mimeType == DocumentsContract.Document.MIME_TYPE_DIR ||
-                mimeType == DocumentsContract.Root.MIME_TYPE_ITEM
+                (Build.VERSION.SDK_INT >= 26 && mimeType == DocumentsContract.Root.MIME_TYPE_ITEM)
 
             return FileMetadata(
                 isRegularFile = !isFolder,

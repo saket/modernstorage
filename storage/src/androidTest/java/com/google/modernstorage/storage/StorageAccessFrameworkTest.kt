@@ -18,12 +18,11 @@ package com.google.modernstorage.storage
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
-import androidx.annotation.RequiresApi
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
@@ -63,8 +62,8 @@ class StorageAccessFrameworkTest {
         file?.delete()
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
     @Test
+    @SdkSuppress(minSdkVersion = 30)
     fun readTextFile() {
         val content = "Hello".toByteArray(Charsets.UTF_8)
         file = addFileToDownloads("txt", "text/plain", content)
