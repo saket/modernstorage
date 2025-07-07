@@ -30,7 +30,7 @@ buildscript {
 plugins {
     id("org.jetbrains.dokka") version libs.versions.dokka
     id("me.tylerbwong.gradle.metalava") version "0.3.5" apply false
-    id("com.vanniktech.maven.publish") version "0.31.0" apply false
+    id("com.vanniktech.maven.publish") version "0.33.0" apply false
     id("org.jetbrains.kotlin.plugin.parcelize") version libs.versions.kotlin apply false
     id("org.jetbrains.kotlin.plugin.compose") version libs.versions.kotlin apply false
 }
