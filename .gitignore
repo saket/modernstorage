@@ -15,6 +15,7 @@
 bin/
 gen/
 out/
+.kotlin/
 #  Uncomment the following line in case you need and you don't have the release build type files in your app
 # release/
 
@@ -77,3 +78,6 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# OS specific ignores
+.DS_Store
