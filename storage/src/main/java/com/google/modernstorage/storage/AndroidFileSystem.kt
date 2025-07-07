@@ -181,7 +181,10 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         val metadata = physicalFileSystem.metadataOrNull(path) ?: return null
 
         val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(path.toString())
-        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension.lowercase(Locale.getDefault()))
+            .ifBlank { path.name.substringAfterLast('.', missingDelimiterValue = "") }
+        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+            fileExtension.lowercase(Locale.getDefault())
+        )
 
         val androidExtras = mutableMapOf(
             Path::class to path,
