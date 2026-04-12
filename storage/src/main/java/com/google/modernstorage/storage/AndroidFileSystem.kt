@@ -74,7 +74,11 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
      * Not yet implemented
      */
     override fun atomicMove(source: Path, target: Path) {
-        TODO("Not yet implemented")
+        if (isPhysicalFile(source) && isPhysicalFile(target)) {
+            physicalFileSystem.atomicMove(source, target)
+        } else {
+            throw UnsupportedOperationException("Atomic moves can't be performed in AndroidFileSystem")
+        }
     }
 
     override fun canonicalize(path: Path): Path {

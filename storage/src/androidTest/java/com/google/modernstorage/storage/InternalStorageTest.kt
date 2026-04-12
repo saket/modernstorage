@@ -200,6 +200,23 @@ class InternalStorageTest {
     }
 
     @Test
+    fun atomicMoveFile() {
+        val source = File(appContext.filesDir, "move-source-${System.currentTimeMillis()}.txt")
+        val target = File(appContext.filesDir, "move-target-${System.currentTimeMillis()}.txt")
+        source.writeText("Hello World")
+
+        fileSystem.atomicMove(source.toOkioPath(), target.toOkioPath())
+
+        Assert.assertFalse(source.exists())
+        Assert.assertTrue(target.exists())
+        target.inputStream().use {
+            Assert.assertEquals("Hello World", String(it.readBytes()))
+        }
+
+        target.delete()
+    }
+
+    @Test
     fun copyImageFromSharedStorage() {
         val sharedFile = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
