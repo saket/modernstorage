@@ -21,6 +21,7 @@ import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import kotlinx.coroutines.runBlocking
@@ -164,7 +165,9 @@ class MediaStoreTest {
         )
     }
 
-    @Test fun add_file_with_a_relative_path() {
+    @Test
+    @SdkSuppress(minSdkVersion = 29) // MediaStore.Downloads does not exist on API 28.
+    fun add_file_with_a_relative_path() {
         addFileFromAssets(
             extension = "jpg",
             mimeType = "image/jpeg",
