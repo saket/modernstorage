@@ -20,10 +20,16 @@ import android.content.Context
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.os.Environment.DIRECTORY_MOVIES
+import android.os.Environment.DIRECTORY_MUSIC
+import android.os.Environment.DIRECTORY_PICTURES
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
+import android.webkit.MimeTypeMap.getSingleton
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
 import androidx.core.provider.DocumentsContractCompat
@@ -187,7 +193,7 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         val fileExtension: String = MimeTypeMap.getFileExtensionFromUrl(path.toString())
             .ifBlank { path.name.substringAfterLast('.', missingDelimiterValue = "") }
         val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-            fileExtension.lowercase(Locale.getDefault())
+            fileExtension.lowercase(Locale.ROOT)
         )
 
         val androidExtras = mutableMapOf(
@@ -390,14 +396,51 @@ class AndroidFileSystem(private val context: Context) : FileSystem() {
         collection: Uri = MediaStore.Files.getContentUri("external"),
         relativePath: String?,
     ): Uri? {
+        val extension = filename.substringAfterLast('.', missingDelimiterValue = "")
+        val mimeType = getSingleton().getMimeTypeFromExtension(
+            extension.lowercase(Locale.ROOT)
+        )
+
         val newEntry = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-            if (relativePath != null) {
+            if (mimeType != null) {
+                put(MediaStore.MediaColumns.MIME_TYPE, mimeType)
+            }
+            if (Build.VERSION.SDK_INT >= 29 && relativePath != null) {
                 put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+            } else if (Build.VERSION.SDK_INT < 29) {
+                val file = legacyMediaStoreFile(filename, collection, relativePath, mimeType)
+                file.parentFile?.mkdirs()
+                put(MediaStore.MediaColumns.DATA, file.absolutePath)
             }
         }
 
         return context.contentResolver.insert(collection, newEntry)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun legacyMediaStoreFile(
+        filename: String,
+        collection: Uri,
+        relativePath: String?,
+        mimeType: String?,
+    ): File {
+        val directory = if (relativePath.isNullOrBlank()) {
+            val segments = collection.pathSegments
+            val directory = when {
+                "images" in segments -> DIRECTORY_PICTURES
+                "video" in segments -> DIRECTORY_MOVIES
+                "audio" in segments -> DIRECTORY_MUSIC
+                mimeType?.startsWith("image/") == true -> DIRECTORY_PICTURES
+                mimeType?.startsWith("video/") == true -> DIRECTORY_MOVIES
+                mimeType?.startsWith("audio/") == true -> DIRECTORY_MUSIC
+                else -> DIRECTORY_DOWNLOADS
+            }
+            Environment.getExternalStoragePublicDirectory(directory)
+        } else {
+            File(Environment.getExternalStorageDirectory(), relativePath.trim('/'))
+        }
+        return File(directory, filename)
     }
 
     suspend fun scanUri(uri: Uri, mimeType: String): Uri? {

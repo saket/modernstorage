@@ -175,6 +175,18 @@ class MediaStoreTest {
     }
 
     @Test
+    @SdkSuppress(maxSdkVersion = 28)
+    fun add_file_with_a_relative_path_on_legacy_media_store() {
+        addFileFromAssets(
+            extension = "jpg",
+            mimeType = "image/jpeg",
+            collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL),
+            relativePath = "${Environment.DIRECTORY_DOWNLOADS}/modernstorage",
+            expectedPath = "/storage/emulated/0/Download/modernstorage/",
+        )
+    }
+
+    @Test
     fun copyImageFromInternalStorage() {
         val internalFile = File(appContext.filesDir, "internal-${System.currentTimeMillis()}.jpg").also {
             appContext.assets.open("sample.jpg").copyTo(it.outputStream())
