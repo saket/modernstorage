@@ -15,16 +15,19 @@
  */
 package com.google.modernstorage.storage
 
+import android.Manifest
 import android.content.Context
 import android.os.Environment
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.GrantPermissionRule
 import okio.Path
 import okio.Path.Companion.toOkioPath
 import okio.buffer
 import okio.source
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
@@ -34,6 +37,9 @@ import java.io.InputStream
 class InternalStorageTest {
     private lateinit var appContext: Context
     private lateinit var fileSystem: AndroidFileSystem
+
+    @get:Rule val readPermission = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)
+    @get:Rule val writePermission = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     @Before
     fun setup() {
