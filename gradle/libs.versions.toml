@@ -1,6 +1,5 @@
 [versions]
 coreKtx = "1.6.1"
-espressoIntents = "3.6.1"
 kotlin = "2.1.20"
 compileSdk = "36"
 targetSdk = "34"
@@ -11,7 +10,6 @@ dokka = "1.9.0"
 core-ktx = { module = "androidx.test:core-ktx", version.ref = "coreKtx" }
 coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version = "1.10.2" }
 
-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "espressoIntents" }
 okio = { module = "com.squareup.okio:okio", version = "3.11.0" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
 

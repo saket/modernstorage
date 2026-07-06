@@ -78,7 +78,6 @@ dependencies {
     implementation(androidx.appcompat)
     implementation(libs.okio)
     implementation(androidx.documentfile)
-    implementation(libs.espresso.intents)
 
     testImplementation(libs.junit)
     androidTestImplementation(androidx.junit)
