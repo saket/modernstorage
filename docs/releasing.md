@@ -1,0 +1,18 @@
+# Release checklist
+
+- [ ] Check that tests have passed on CI on the main branch.
+- [ ] Change version name from SNAPSHOT to an actual name.
+- [ ] Update project website with:
+    - [ ] new version’s maven address
+    - [ ] new APIs
+- [ ] Commit `Prepare to release vX.X.X`. Do not push yet.
+- [ ] Upload archives to maven.
+  `g clean publishAndReleaseToMavenCentral --no-parallel --no-daemon`
+- [ ] Wait for artifacts to be available.
+  `dependency-watch await me.saket.modernstorage:modernstorage-storage:{version}`
+- [ ] Ensure that the release is available on maven by using it in `:sample`
+- [ ] Push commit.
+- [ ] Generate a sample APK.
+- [ ] Draft a changelog.
+- [ ] Make a release on Github.
+- [ ] Push a new commit `Prepare next development version` by bumping version and changing library version to SNAPSHOT.
